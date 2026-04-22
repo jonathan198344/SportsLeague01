@@ -9,53 +9,77 @@ namespace SportsLeague.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TeamController : ControllerBase
+public class PlayerController : ControllerBase
 {
-    private readonly ITeamService _teamService;
+    private readonly IPlayerService _playerService;
     private readonly IMapper _mapper;
+    private readonly ILogger<PlayerController> _logger;
 
-
-    public TeamController(
-        ITeamService teamService,
-        IMapper mapper)
+    public PlayerController(
+        IPlayerService playerService,
+        IMapper mapper,
+        ILogger<PlayerController> logger)
     {
-        _teamService = teamService;
+        _playerService = playerService;
         _mapper = mapper;
+        _logger = logger;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TeamResponseDTO>>> GetAll()
+    public async Task<ActionResult<IEnumerable<PlayerResponseDTO>>> GetAll()
     {
-        var teams = await _teamService.GetAllAsync();
-        var teamsDto = _mapper.Map<IEnumerable<TeamResponseDTO>>(teams);
-        return Ok(teamsDto);
+        var players = await _playerService.GetAllAsync();
+        var playersDto = _mapper.Map<IEnumerable<PlayerResponseDTO>>(players);
+        return Ok(playersDto);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TeamResponseDTO>> GetById(int id)
+    public async Task<ActionResult<PlayerResponseDTO>> GetById(int id)
     {
-        var team = await _teamService.GetByIdAsync(id);
+        var player = await _playerService.GetByIdAsync(id);
 
-        if (team == null)
-            return NotFound(new { message = $"Equipo con ID {id} no encontrado" });
+        if (player == null)
+            return NotFound(new { message = $"Jugador con ID {id} no encontrado" });
 
-        var teamDto = _mapper.Map<TeamResponseDTO>(team);
-        return Ok(teamDto);
+        var playerDto = _mapper.Map<PlayerResponseDTO>(player);
+        return Ok(playerDto);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<TeamResponseDTO>> Create(TeamRequestDTO dto)
+    [HttpGet("team/{teamId}")]
+    public async Task<ActionResult<IEnumerable<PlayerResponseDTO>>> GetByTeam(int teamId)
     {
         try
         {
-            var team = _mapper.Map<Team>(dto);
-            var createdTeam = await _teamService.CreateAsync(team);
-            var responseDto = _mapper.Map<TeamResponseDTO>(createdTeam);
+            var players = await _playerService.GetByTeamAsync(teamId);
+            var playersDto = _mapper.Map<IEnumerable<PlayerResponseDTO>>(players);
+            return Ok(playersDto);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<PlayerResponseDTO>> Create(PlayerRequestDTO dto)
+    {
+        try
+        {
+            var player = _mapper.Map<Player>(dto);
+            var createdPlayer = await _playerService.CreateAsync(player);
+
+            // Recargar con Team para el response
+            var playerWithTeam = await _playerService.GetByIdAsync(createdPlayer.Id);
+            var responseDto = _mapper.Map<PlayerResponseDTO>(playerWithTeam);
 
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = responseDto.Id },
                 responseDto);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
         }
         catch (InvalidOperationException ex)
         {
@@ -64,12 +88,12 @@ public class TeamController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Update(int id, TeamRequestDTO dto)
+    public async Task<ActionResult> Update(int id, PlayerRequestDTO dto)
     {
         try
         {
-            var team = _mapper.Map<Team>(dto);
-            await _teamService.UpdateAsync(id, team);
+            var player = _mapper.Map<Player>(dto);
+            await _playerService.UpdateAsync(id, player);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
@@ -87,7 +111,7 @@ public class TeamController : ControllerBase
     {
         try
         {
-            await _teamService.DeleteAsync(id);
+            await _playerService.DeleteAsync(id);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
@@ -96,4 +120,3 @@ public class TeamController : ControllerBase
         }
     }
 }
-
