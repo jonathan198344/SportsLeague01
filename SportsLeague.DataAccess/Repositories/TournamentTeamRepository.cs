@@ -13,13 +13,12 @@ namespace SportsLeague.DataAccess.Repositories
         {
         }
 
-        public async Task<TournamentTeam?> GetByTournamentAndTeamAsync(
-            int tournamentId, int teamId)
+        public async Task<TournamentTeam?> GetByTournamentAndTeamAsync( int tournamentId, int teamId)
+            
         {
             return await _dbSet
-            .Where(tt =>
-                    tt.TournamentId == tournamentId && tt.TeamId == teamId)
-                .FirstOrDefaultAsync();
+            .Where(tt => tt.TournamentId == tournamentId && tt.TeamId == teamId)
+            .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<TournamentTeam>> GetByTournamentAsync(
