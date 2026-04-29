@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportsLeague.Domain.Entities;
+using SportsLeague.Domain.Entities.SportsLeague.Domain.Entities;
 
 namespace SportsLeague.DataAccess.Context;
 
@@ -141,6 +142,30 @@ public class LeagueDbContext : DbContext
             // Índice único compuesto: un equipo solo una vez por torneo
             entity.HasIndex(tt => new { tt.TournamentId, tt.TeamId })
                   .IsUnique();
+
+            modelBuilder.Entity<TournamentSponsor>(entity =>
+            {
+                entity.HasKey(ts => ts.Id);
+                entity.Property(ts => ts.ContractAmount)
+                  .HasColumnType("numeric(18,2)")
+                  .IsRequired();
+                entity.Property(ts => ts.JoinedAt)
+                  .IsRequired();
+                entity.Property(ts => ts.CreatedAt)
+                  .IsRequired();
+                entity.Property(ts => ts.UpdatedAt)
+                  .IsRequired(false);
+                entity.HasOne(ts => ts.Tournament)
+                  .WithMany(t => t.TournamentSponsors)
+                  .HasForeignKey(ts => ts.TournamentId)
+                  .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(ts => ts.Sponsor)
+                  .WithMany(s => s.TournamentSponsors)
+                  .HasForeignKey(ts => ts.SponsorId)
+                  .OnDelete(DeleteBehavior.Cascade);
+                entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+                  .IsUnique();
+            });
         });
 
     }

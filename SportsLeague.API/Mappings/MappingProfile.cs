@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using SportsLeague.API.DTOs.Request;
+using SportsLeague.API.DTOs.Request.SportsLeague.API.DTOs.Request;
 using SportsLeague.API.DTOs.Response;
+using SportsLeague.API.DTOs.Response.SportsLeague.API.DTOs.Response;
 using SportsLeague.Domain.Entities;
+using SportsLeague.Domain.Entities.SportsLeague.Domain.Entities;
 
 namespace SportsLeague.API.Mappings;
 
@@ -31,6 +34,20 @@ public class MappingProfile : Profile
                 dest => dest.TeamsCount,
                 opt => opt.MapFrom(src =>
                     src.TournamentTeams != null ? src.TournamentTeams.Count : 0));
+        // sponsor mappings
+        CreateMap<SponsorRequestDTO, Sponsor>();
+        CreateMap<Sponsor, SponsorResponseDTO>();
+
+        CreateMap<TournamentSponsor, TournamentSponsorResponseDTO>()
+            .ForMember(
+                dest => dest.TournamentName,
+                opt => opt.MapFrom(src => src.Tournament.Name))
+            .ForMember(
+                dest => dest.Season,
+                opt => opt.MapFrom(src => src.Tournament.Season))
+            .ForMember(
+                dest => dest.SponsorName,
+                opt => opt.MapFrom(src => src.Sponsor.Name));
 
     }
 }
