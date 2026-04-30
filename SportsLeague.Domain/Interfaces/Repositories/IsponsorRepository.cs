@@ -1,4 +1,4 @@
-﻿using SportsLeague.Domain.Entities.SportsLeague.Domain.Entities;
+﻿using SportsLeague.Domain.Entities;
 
 namespace SportsLeague.Domain.Interfaces.Repositories
 {
@@ -8,6 +8,7 @@ namespace SportsLeague.Domain.Interfaces.Repositories
         {
             Task<Sponsor?> GetByNameAsync(string name);
             Task<bool> ExistsByNameAsync(string name);
+            Task<Sponsor> CreateAsync(Sponsor sponsor);
             Task<Sponsor> CreateAsync(Sponsor sponsor);
         }
     }

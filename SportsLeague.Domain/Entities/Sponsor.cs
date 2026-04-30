@@ -1,7 +1,5 @@
-﻿namespace SportsLeague.Domain.Entities
-{
-    using global::SportsLeague.Domain.Enums.SportsLeague.Domain.Enums;
-    using System.Collections.Generic;
+﻿    using SportsLeague.Domain.Enums;
+    
 
     namespace SportsLeague.Domain.Entities
     {
@@ -16,4 +14,4 @@
             public ICollection<TournamentSponsor> TournamentSponsors { get; set; } = new List<TournamentSponsor>();
         }
     }
-}
+

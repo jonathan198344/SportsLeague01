@@ -3,9 +3,7 @@ using SportsLeague.Domain.Entities;
 using SportsLeague.Domain.Enums;
 using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace SportsLeague.Domain.Services
 {
@@ -108,7 +106,7 @@ namespace SportsLeague.Domain.Services
             if (tournament == null)
                 throw new KeyNotFoundException($"No se encontró el torneo con ID {id}");
 
-            // Validar transiciones válidas
+            // Validate valid transitions
             var validTransition = (tournament.Status, newStatus) switch
             {
                 (TournamentStatus.Pending, TournamentStatus.InProgress) => true,
@@ -132,7 +130,7 @@ namespace SportsLeague.Domain.Services
 
         public async Task RegisterTeamAsync(int tournamentId, int teamId)
         {
-            // Validar que el torneo existe
+            // Verify that the tournament exists
             var tournament = await _tournamentRepository.GetByIdAsync(tournamentId);
             if (tournament == null)
                 throw new KeyNotFoundException(

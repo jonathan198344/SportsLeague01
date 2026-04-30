@@ -1,9 +1,8 @@
-﻿using global::SportsLeague.Domain.Entities;
-using global::SportsLeague.Domain.Interfaces.Repositories;
-using global::SportsLeague.Domain.Interfaces.Repositories.SportsLeague.Domain.Interfaces;
-using global::SportsLeague.Domain.Interfaces.Repositories.SportsLeague.Domain.Interfaces.Repositories;
+﻿
 using Microsoft.Extensions.Logging;
-using SportsLeague.Domain.Entities.SportsLeague.Domain.Entities;
+using SportsLeague.Domain.Entities;
+using SportsLeague.Domain.Interfaces.Repositories;
+using SportsLeague.Domain.Interfaces.Repositories.SportsLeague.Domain.Interfaces;
 using System.Net.Mail;
 
 namespace SportsLeague.Domain.Interfaces.Services
@@ -13,13 +12,13 @@ namespace SportsLeague.Domain.Interfaces.Services
 
         private readonly ISponsorRepository _sponsorRepository;
         private readonly ITournamentRepository _tournamentRepository;
-        private readonly ITournamentSponsorRepository _tournamentSponsorRepository;
+        private readonly Repositories.ITournamentSponsorRepository _tournamentSponsorRepository;
         private readonly ILogger<SponsorService> _logger;
 
         public SponsorService(
             ISponsorRepository sponsorRepository,
             ITournamentRepository tournamentRepository,
-            ITournamentSponsorRepository tournamentSponsorRepository,
+            Repositories.ITournamentSponsorRepository tournamentSponsorRepository,
             ILogger<SponsorService> logger)
         {
             _sponsorRepository = sponsorRepository;
@@ -53,7 +52,7 @@ namespace SportsLeague.Domain.Interfaces.Services
             if (exists)
             {
                 throw new InvalidOperationException(
-                    $"El patrocinador con nombre '{sponsor.Name}' ya existe.");
+                    $"The sponsor with name '{sponsor.Name}' It already exists.");
             }
 
             _logger.LogInformation("Creating sponsor: {SponsorName}", sponsor.Name);
@@ -65,7 +64,7 @@ namespace SportsLeague.Domain.Interfaces.Services
             var existing = await _sponsorRepository.GetByIdAsync(id);
             if (existing == null)
             {
-                throw new KeyNotFoundException($"El patrocinador con ID {id} no fue encontrado");
+                throw new KeyNotFoundException($"The sponsor withID {id}He was not found.");
             }
 
             ValidateSponsor(sponsor);
@@ -76,7 +75,7 @@ namespace SportsLeague.Domain.Interfaces.Services
                 if (duplicated != null && duplicated.Id != id)
                 {
                     throw new InvalidOperationException(
-                        $"El patrocinador con nombre '{sponsor.Name}' ya existe.");
+                        $"The sponsor with name '{sponsor.Name}' It already exists.");
                 }
             }
 
@@ -95,10 +94,10 @@ namespace SportsLeague.Domain.Interfaces.Services
             var exists = await _sponsorRepository.ExistsAsync(id);
             if (!exists)
             {
-                throw new KeyNotFoundException($"El patrocinador con ID {id} no fue encontrado");
+                throw new KeyNotFoundException($"The sponsor with ID {id} He was not found");
             }
 
-            _logger.LogInformation("Eliminando patrocinador con ID: {SponsorId}", id);
+            _logger.LogInformation("The sponsor with ID: {SponsorId}", id);
             await _sponsorRepository.DeleteAsync(id);
         }
 
@@ -110,18 +109,18 @@ namespace SportsLeague.Domain.Interfaces.Services
             var sponsorExists = await _sponsorRepository.ExistsAsync(sponsorId);
             if (!sponsorExists)
             {
-                throw new KeyNotFoundException($"El patrocinador con ID {sponsorId} no fue encontrado");
+                throw new KeyNotFoundException($"The sponsor with ID {sponsorId} He was not found.");
             }
 
             var tournamentExists = await _tournamentRepository.ExistsAsync(tournamentId);
             if (!tournamentExists)
             {
-                throw new KeyNotFoundException($"El torneo con ID {tournamentId} no fue encontrado");
+                throw new KeyNotFoundException($"The tournament with ID {tournamentId} He was not found.");
             }
 
             if (contractAmount <= 0)
             {
-                throw new InvalidOperationException("El monto del contrato debe ser mayor a 0");
+                throw new InvalidOperationException("The contract amount must be greater than 0");
             }
 
             var existing = await _tournamentSponsorRepository
@@ -129,7 +128,7 @@ namespace SportsLeague.Domain.Interfaces.Services
             if (existing != null)
             {
                 throw new InvalidOperationException(
-                    $"El patrocinador con ID {sponsorId} ya está vinculado al torneo {tournamentId}");
+                    $"The sponsor with ID {sponsorId} He is already linked to the tournament {tournamentId}");
             }
 
             var tournamentSponsor = new TournamentSponsor
@@ -156,7 +155,7 @@ namespace SportsLeague.Domain.Interfaces.Services
             var sponsorExists = await _sponsorRepository.ExistsAsync(sponsorId);
             if (!sponsorExists)
             {
-                throw new KeyNotFoundException($"El patrocinador con ID {sponsorId} no fue encontrado");
+                throw new KeyNotFoundException($"The sponsor with ID {sponsorId} He was not found.");
             }
 
             return await _tournamentSponsorRepository.GetBySponsorIdAsync(sponsorId);
@@ -167,13 +166,13 @@ namespace SportsLeague.Domain.Interfaces.Services
             var sponsorExists = await _sponsorRepository.ExistsAsync(sponsorId);
             if (!sponsorExists)
             {
-                throw new KeyNotFoundException($"El patrocinador con ID {sponsorId} no fue encontrado");
+                throw new KeyNotFoundException($"The sponsor with ID {sponsorId} He was not found.");
             }
 
             var tournamentExists = await _tournamentRepository.ExistsAsync(tournamentId);
             if (!tournamentExists)
             {
-                throw new KeyNotFoundException($"El torneo con ID {tournamentId} no fue encontrado");
+                throw new KeyNotFoundException($"The tournament with ID {tournamentId} He was not found.");
             }
 
             var existing = await _tournamentSponsorRepository
@@ -181,7 +180,7 @@ namespace SportsLeague.Domain.Interfaces.Services
             if (existing == null)
             {
                 throw new KeyNotFoundException(
-                    $"El patrocinador con ID {sponsorId} no está vinculado al torneo {tournamentId}");
+                    $"The sponsor with ID {sponsorId} It is not linked to the tournament {tournamentId}");
             }
 
             _logger.LogInformation(
@@ -195,12 +194,12 @@ namespace SportsLeague.Domain.Interfaces.Services
         {
             if (string.IsNullOrWhiteSpace(sponsor.Name))
             {
-                throw new InvalidOperationException("El nombre del patrocinador es obligatorio");
+                throw new InvalidOperationException("The sponsor's name is required");
             }
 
             if (string.IsNullOrWhiteSpace(sponsor.ContactEmail))
             {
-                throw new InvalidOperationException("El correo electrónico de contacto es obligatorio");
+                throw new InvalidOperationException("The contact email address is required");
             }
 
             try
@@ -209,7 +208,7 @@ namespace SportsLeague.Domain.Interfaces.Services
             }
             catch (FormatException)
             {
-                throw new InvalidOperationException("El formato del correo electrónico es inválido");
+                throw new InvalidOperationException("The email format is invalid.");
             }
 
         }
@@ -225,4 +224,6 @@ namespace SportsLeague.Domain.Interfaces.Services
         }
     }
 }
-}
+
+
+

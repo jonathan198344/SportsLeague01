@@ -2,10 +2,10 @@
 
 namespace SportsLeague.Domain.Interfaces.Repositories
 {
-    public interface ITournamentTeamRepository : IGenericRepository<TournamentTeam>
+    public interface ITournamentSponsorRepository : IGenericRepository<TournamentSponsor>
     {
-        Task<TournamentTeam?> GetByTournamentAndTeamAsync(int tournamentId, int teamId);
-        Task<IEnumerable<TournamentTeam>> GetByTournamentAsync(int tournamentId);
+        Task<TournamentSponsor?> GetByTournamentAndSponsorAsync(int tournamentId, int sponsorId);
+        Task<IEnumerable<TournamentSponsor>> GetByTournamentIdAsync(int tournamentId);
+        Task<IEnumerable<TournamentSponsor>> GetBySponsorIdAsync(int sponsorId);
     }
-
 }
