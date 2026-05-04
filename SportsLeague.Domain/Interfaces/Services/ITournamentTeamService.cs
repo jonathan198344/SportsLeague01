@@ -5,7 +5,7 @@ using SportsLeague.Domain.Entities;
 namespace SportsLeague.Domain.Interfaces.Repositories;
 
     
-    public interface ITournamentTeamRepository
+    public interface ITournamentTeamService
     {
         Task<IEnumerable<TournamentTeam>> GetAllAsync();
         Task<TournamentTeam> GetByIdAsync(int id);

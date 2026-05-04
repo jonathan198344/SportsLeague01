@@ -1,4 +1,6 @@
-﻿namespace SportsLeague.Domain.Interfaces.Repositories
+﻿using SportsLeague.Domain.Entities;
+
+namespace SportsLeague.Domain.Interfaces.Repositories
 {
     namespace SportsLeague.Domain.Interfaces.Repositories
     {

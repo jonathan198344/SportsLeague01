@@ -7,7 +7,7 @@ using SportsLeague.Domain.Interfaces.Repositories;
 namespace SportsLeague.DataAccess.Repositories
 {
     
-    public class TournamentTeamRepository : GenericRepository<TournamentTeam>, ITournamentTeamRepository
+    public class TournamentTeamRepository : GenericRepository<TournamentTeam>, ITournamentTeamService
     {
         public TournamentTeamRepository(LeagueDbContext context) : base(context)
         {

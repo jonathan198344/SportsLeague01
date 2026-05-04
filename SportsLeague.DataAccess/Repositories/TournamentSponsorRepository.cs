@@ -1,8 +1,7 @@
 ﻿
-
-    using global::SportsLeague.DataAccess.Context;
-    using global::SportsLeague.Domain.Entities.SportsLeague.Domain.Entities;
-    using global::SportsLeague.Domain.Interfaces.Repositories.SportsLeague.Domain.Interfaces.Repositories;
+    using SportsLeague.DataAccess.Context;
+    using SportsLeague.Domain.Entities;
+    using SportsLeague.Domain.Interfaces.Repositories.SportsLeague.Domain.Interfaces.Repositories;
     using Microsoft.EntityFrameworkCore;
 
     namespace SportsLeague.DataAccess.Repositories

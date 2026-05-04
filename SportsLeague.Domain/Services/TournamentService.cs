@@ -11,13 +11,13 @@ namespace SportsLeague.Domain.Services
     public class TournamentService : ITournamentService
     {
         private readonly ITournamentRepository _tournamentRepository;
-        private readonly ITournamentTeamRepository _tournamentTeamRepository;
+        private readonly ITournamentTeamService _tournamentTeamRepository;
         private readonly ITeamRepository _teamRepository;
         private readonly ILogger<TournamentService> _logger;
 
         public TournamentService(
             ITournamentRepository tournamentRepository,
-            ITournamentTeamRepository tournamentTeamRepository,
+            ITournamentTeamService tournamentTeamRepository,
             ITeamRepository teamRepository,
             ILogger<TournamentService> logger)
         {

@@ -1,7 +1,4 @@
-﻿
-using SportsLeague.Domain.Entities.SportsLeague.Domain.Entities;
-
-namespace SportsLeague.Domain.Entities;
+﻿namespace SportsLeague.Domain.Entities;
 
 public class TournamentSponsor : AuditBase
 {

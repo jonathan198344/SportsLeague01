@@ -8,8 +8,8 @@ namespace SportsLeague.Domain.Interfaces.Repositories
         {
             Task<Sponsor?> GetByNameAsync(string name);
             Task<bool> ExistsByNameAsync(string name);
-            Task<Sponsor> CreateAsync(Sponsor sponsor);
-            Task<Sponsor> CreateAsync(Sponsor sponsor);
+            new Task<Sponsor> CreateAsync(Sponsor sponsor);
+            
         }
     }
 }
